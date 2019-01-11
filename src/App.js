@@ -60,19 +60,19 @@ class App extends Component {
               />
             </Col>
             <Col sm={12}>
-              <TaskList
+              { this.state.taskList.some(r => r.isChecked === true) && <TaskList
                 title={"Task Done"}
                 items={this.state.taskList.filter(r=> r.isChecked === true)}
                 showAll={this.state.showAll}
                 onChangeItemState={this.handleChangeState}
-              />
+              />}
             </Col>            
-            <Col sm={12}>
+            {/* <Col sm={12}>
               <TaskToolBar
                 onChangeShowAll={this.handleShowAll}
                 showAll={this.state.showAll}
               />
-            </Col>
+            </Col> */}
           </Row>
         </Grid>
       </div>
