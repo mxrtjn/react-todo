@@ -4,28 +4,31 @@ import { Grid, Row, Col } from "react-bootstrap";
 import TaskInput from "./components/TaskInput";
 import TaskList from "./components/TaskList";
 import TaskHeader from "./components/TaskHeader";
-import TaskToolBar from "./components/TaskToolBar";
 
 import "./App.css";
 
 class App extends Component {
   state = {
-    taskList: [
-      { id: 1, name: "walk dog", isChecked: true },
-      { id: 2, name: "walk cat ddd", isChecked: false }
-    ],
-    showAll: false
+    taskList: []
   };
 
   handleAddTask = taskName => {
     this.setState({
-      taskList: [...this.state.taskList, { id: this.state.taskList.length + 1,  name: taskName, isChecked: false }]
+      taskList: [
+        ...this.state.taskList,
+        { id: this.state.taskList.length + 1, name: taskName, isChecked: false }
+      ]
     });
   };
 
-  handleChangeState = id => {
+  handleToogleChecked = id => {
+    const newTaskList = this.state.taskList.map(taskItem => {
+      if (taskItem.id === id)
+        return { ...taskItem, isChecked: !taskItem.isChecked };
+      else return taskItem;
+    });
     this.setState({
-      taskList: this.unmutableList(this.state.taskList, id)
+      taskList: newTaskList
     });
   };
 
@@ -33,16 +36,10 @@ class App extends Component {
     this.setState({ showAll: !this.state.showAll });
   };
 
-  unmutableList = (list, id) => {
-    let index = list.findIndex(r=>r.id === id);
-    return [
-      ...list.slice(0, index),
-      { ...list[index], ...{ isChecked: !list[index].isChecked } },
-      ...list.slice(index + 1)
-    ];
-  };
-
   render() {
+    let pendingList = this.state.taskList.filter(r => r.isChecked === false);
+    let doneList = this.state.taskList.filter(r => r.isChecked === true);
+
     return (
       <div>
         <TaskHeader />
@@ -54,25 +51,19 @@ class App extends Component {
             <Col sm={12}>
               <TaskList
                 title={"Task to Do"}
-                items={this.state.taskList.filter(r => r.isChecked === false)}
-                showAll={this.state.showAll}
-                onChangeItemState={this.handleChangeState}
+                items={pendingList}
+                onTaskClick={this.handleToogleChecked}
               />
             </Col>
             <Col sm={12}>
-              { this.state.taskList.some(r => r.isChecked === true) && <TaskList
-                title={"Task Done"}
-                items={this.state.taskList.filter(r=> r.isChecked === true)}
-                showAll={this.state.showAll}
-                onChangeItemState={this.handleChangeState}
-              />}
-            </Col>            
-            {/* <Col sm={12}>
-              <TaskToolBar
-                onChangeShowAll={this.handleShowAll}
-                showAll={this.state.showAll}
-              />
-            </Col> */}
+              {doneList.length > 0 && (
+                <TaskList
+                  title={"Task Done"}
+                  items={doneList}
+                  onTaskClick={this.handleToogleChecked}
+                />
+              )}
+            </Col>
           </Row>
         </Grid>
       </div>
