@@ -3,7 +3,7 @@ import { InputGroup, Button, FormControl, Glyphicon } from "react-bootstrap";
 
 class TaskInput extends React.Component {
   state = {
-    taskName: ""
+    taskName: "new input"
   };
 
   onChangeTaskText = e => {
