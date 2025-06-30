@@ -10,7 +10,9 @@ module.exports = defineConfig({
     embeddedScreenshots: true,
     inlineAssets: true,
     saveAllAttempts: true,
-    "reportDir": "cypress/reports",
+    saveJson: true,
+    reportDir: "cypress/reports",
+
   },
   e2e: {
     setupNodeEvents(on, config) {
