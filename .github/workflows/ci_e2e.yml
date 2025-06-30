@@ -34,7 +34,7 @@ jobs:
           pending=$(jq '.stats.pending' $report)
           skipped=$(jq '.stats.skipped' $report)
           branch_name=$(echo "${GITHUB_REF#refs/heads/}")
-          result_text= "($failed == 0 && 'Exitoso' || 'Fallido')"
+          result_text="${failed == 0 && 'Exitoso' || 'Fallido'}"
           user_commit=$(echo "${{ github.event.head_commit.committer.username }}")
           last_commit_name=$(echo "${{ github.event.head_commit.message }}")
           repo_url=$(echo "${{ github.repositoryUrl }}")
