@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "cypress": "^12.9.0",
+    "cypress-json-results": "^1.5.0",
+    "cypress-mochawesome-reporter": "^3.3.0",
     "react-scripts": "0.8.5"
   },
   "dependencies": {
@@ -12,6 +15,8 @@
     "gh-pages": "^3.1.0"
   },
   "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
