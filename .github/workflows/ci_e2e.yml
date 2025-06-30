@@ -38,7 +38,7 @@ jobs:
           last_commit_name=$(echo "${{ github.event.head_commit.message }}")
           repo_url=$(echo "${{ github.repositoryUrl }}")
           repo_url=${repo_url//git:\/\/}
-          full_text="$user_commit workflow *${{github.workflow}}* in <$repo_url|$branch_name>"
+          full_text="$user_commit workflow *${{github.workflow}}* in <$repo_url|$branch_name> $branch_name"
           msg="📊 E2E Results on branch: $last_commit_name $branch_name\n\n• Total: $total\n• Passed: $passed\n• Failed: $failed\n• Pending: $pending\n•Skipped: $skipped"
           curl -X POST -H 'Content-type: application/json' \
             --data "{\"channel\":\"e2e-cypress-notifications\",\"text\":\"$full_text\"}" \
