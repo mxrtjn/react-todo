@@ -16,6 +16,12 @@ jobs:
         run: npm install
       - name: "Run Cypress tests"
         run: npx cypress run --spec "cypress/e2e/1-getting-started"
+      - name: "Upload mochawesome report"
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mochawesome-report
+          path: cypress/reports
       - name: "Parse Test Results and Send to Slack"
         if: always()
         env:
@@ -33,9 +39,3 @@ jobs:
             --data "{\"channel\":\"notificaciones-remuneraciones-peru\",\"text\":\"$msg\"}" \
             https://slack.com/api/chat.postMessage \
             -H "Authorization: Bearer $AUTH_KEY_SLACK"
-      - name: "Upload mochawesome report"
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: mochawesome-report
-          path: cypress/reports
