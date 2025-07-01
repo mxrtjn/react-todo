@@ -36,16 +36,18 @@ jobs:
           branch_name=$(echo "${GITHUB_REF#refs/heads/}")
           if [ "$failed" -eq 0 ]; then
             result_text="Exitoso"
+            result_color="good"
           else
             result_text="Fallido"
+            result_color="danger"
           fi
           user_commit=$(echo "${{ github.event.head_commit.committer.username }}")
           last_commit_name=$(echo "${{ github.event.head_commit.message }}")
           repo_url=$(echo "${{ github.repositoryUrl }}")
           repo_url=${repo_url//git:/https:}
-          full_text="$result_text: Github workflow *${{github.workflow}}* ejecutado por $user_commit en el branch <$repo_url|$branch_name>"
+          full_text="📊 E2E Resultado *$result_text*: Github workflow *${{github.workflow}}* ejecutado por $user_commit en el branch <$repo_url|$branch_name>"
           msg="📊 E2E Results on branch: $last_commit_name $branch_name\n\n• Total: $total\n• Passed: $passed\n• Failed: $failed\n• Pending: $pending\n•Skipped: $skipped"
           curl -X POST -H 'Content-type: application/json' \
-            --data "{\"channel\":\"e2e-cypress-notifications\",\"text\":\"$full_text\"}" \
+            --data "{\"channel\":\"e2e-cypress-notifications\",\"text\":\"$full_text\", \"attachments\": [{ \"color\": $result_color, \"author_name\": $user_commit, \"author_link\": \"https://github.com/$user_commit\", \"author_icon\": \"https://github.com/$user_commit.png?size=32\" }] }" \
             https://slack.com/api/chat.postMessage \
             -H "Authorization: Bearer $AUTH_KEY_SLACK"
