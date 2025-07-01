@@ -58,7 +58,7 @@ jobs:
           repo_name=$(echo "${{ github.repository }}")
           event_name=$(echo "${{ github.event_name }}")
           sha=$(echo "${{ github.sha }}")
-          full_text="📊 E2E Resultado *$result_text*: Github workflow *${{github.workflow}}* ejecutado por *$user_commit* en el branch <$repo_url|$repo_name>"
+          full_text="📊 E2E Resultado *$result_text*: Github workflow *${{github.workflow}}* ejecutado por *$user_commit* en el repositorio <$repo_url|$repo_name>"
           curl -X POST -H 'Content-type: application/json' \
             --data "{\"channel\":\"e2e-cypress-notifications\",\"text\":\"$full_text\", \"attachments\": [{ \"color\": \"$result_color\", \"author_name\": \"$user_commit\", \"author_link\": \"https://github.com/$user_commit\", \"author_icon\": \"https://github.com/$user_commit.png?size=32\", \"fields\": [{ \"title\": \"Branch\", \"value\": \"$branch_name\", \"short\": true}, { \"title\": \"Event\", \"value\": \"$event_name\", \"short\": true}, { \"title\": \"Action URL\", \"value\":\"$repo_url/commit/$sha/checks\"}, { \"title\": \"Commit details\", \"value\": \"$last_commit_message\"}, {  \"title\": \"Test Totales\", \"value\": \"$total\", \"short\": true}, {  \"title\": \"Test Satisfactorio\", \"value\": \"$passed\", \"short\": true}, {  \"title\": \"Test Fallidos\", \"value\": \"$failed\", \"short\": true}, { \"title\": \"Test Pendientes\", \"value\": \"$pending\", \"short\": true}, { \"title\": \"Test Saltados\", \"value\": \"$skipped\", \"short\": true}, { \"title\": \"Duración\", \"value\": \"$duration_text\", \"short\": true} ] }] }" \
             https://slack.com/api/chat.postMessage \
