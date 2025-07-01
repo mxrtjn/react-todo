@@ -42,14 +42,15 @@ jobs:
             result_color="danger"
           fi
           user_commit=$(echo "${{ github.event.head_commit.committer.username }}")
-          last_commit_name=$(echo "${{ github.event.head_commit.message }}")
+          last_commit_message=$(echo "${{ github.event.head_commit.message }}")
           repo_url=$(echo "${{ github.repositoryUrl }}")
           repo_url=${repo_url//git:/https:}
+          repo_url=${repo_url//.git/}
           event_name=$(echo "${{ github.event_name }}")
           sha=$(echo "${{ github.sha }}")
           full_text="📊 E2E Resultado *$result_text*: Github workflow *${{github.workflow}}* ejecutado por *$user_commit* en el branch <$repo_url|$branch_name>"
-          msg="📊 E2E Results on branch: $last_commit_name $branch_name\n\n• Total: $total\n• Passed: $passed\n• Failed: $failed\n• Pending: $pending\n•Skipped: $skipped"
+          msg="📊 E2E Results on branch: $last_commit_message $branch_name\n\n• Total: $total\n• Passed: $passed\n• Failed: $failed\n• Pending: $pending\n•Skipped: $skipped"
           curl -X POST -H 'Content-type: application/json' \
-            --data "{\"channel\":\"e2e-cypress-notifications\",\"text\":\"$full_text\", \"attachments\": [{ \"color\": \"$result_color\", \"author_name\": \"$user_commit\", \"author_link\": \"https://github.com/$user_commit\", \"author_icon\": \"https://github.com/$user_commit.png?size=32\", \"fields\": [{ \"title\": \"Branch\", \"value\": \"$branch_name\", \"short\": true}, { \"title\": \"Event\", \"value\": \"$event_name\", \"short\": true}, { \"title\": \"Action URL\", \"value\":\"$repo_url/commit/$sha/checks\"} ] }] }" \
+            --data "{\"channel\":\"e2e-cypress-notifications\",\"text\":\"$full_text\", \"attachments\": [{ \"color\": \"$result_color\", \"author_name\": \"$user_commit\", \"author_link\": \"https://github.com/$user_commit\", \"author_icon\": \"https://github.com/$user_commit.png?size=32\", \"fields\": [{ \"title\": \"Branch\", \"value\": \"$branch_name\", \"short\": true}, { \"title\": \"Event\", \"value\": \"$event_name\", \"short\": true}, { \"title\": \"Action URL\", \"value\":\"$repo_url/commit/$sha/checks\"}, { \"title\": \"Commit details\", \"value\": \"$last_commit_message\"} ] }] }" \
             https://slack.com/api/chat.postMessage \
             -H "Authorization: Bearer $AUTH_KEY_SLACK"
