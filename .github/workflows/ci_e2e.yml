@@ -34,7 +34,7 @@ jobs:
           pending=$(jq '.stats.pending' $report)
           skipped=$(jq '.stats.skipped' $report)
           seconds=$(jq '.stats.duration' $report)
-          seconds=${(seconds/1000)}
+          seconds=$(($seconds/1000))
           branch_name=$(echo "${GITHUB_REF#refs/heads/}")
           if [ "$failed" -eq 0 ]; then
             result_text="Exitoso"
